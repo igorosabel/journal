@@ -1,0 +1,38 @@
+@use '@angular/material' as mat;
+
+:root {
+  --color-error: #dc3545;
+}
+
+html {
+  height: 100%;
+  @include mat.theme((color: (primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+.button-icon {
+  width: 24px;
+  vertical-align: bottom;
+}
+
+.field-error {
+  display: block;
+  color: var(--color-error);
+}
+
+.center {
+  text-align: center;
+}

@@ -1,0 +1,47 @@
+<form (ngSubmit)="register()"
+      class="register-form">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Registrarse</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="register-fields">
+                <mat-form-field>
+                    <mat-label>Usuario</mat-label>
+                    <input matInput
+                           [formField]="registerForm.name"
+                           #username>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput
+                           type="password"
+                           [formField]="registerForm.pass">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Confirmar contraseña</mat-label>
+                    <input matInput
+                           type="password"
+                           [formField]="registerForm.conf">
+                </mat-form-field>
+                @if (registerError()) {
+                <span class="field-error center">El nombre de usuario está en uso.</span>
+                }
+            </div>
+        </mat-card-content>
+        <mat-card-actions class="action-buttons">
+            <button matButton="filled"
+                    [disabled]="loading()"
+                    routerLink="/">
+                Volver
+            </button>
+            <button matButton="filled"
+                    [disabled]="loading()">
+                @if (!loading()) {
+                Continuar
+                }
+                <app-loading-icon [show]="loading()" />
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</form>
