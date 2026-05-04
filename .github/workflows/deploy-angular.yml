@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular (test)
-        run: npm run build -- --configuration test
+        run: npm run build
 
       - name: Validate build output
         run: |
