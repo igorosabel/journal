@@ -26,6 +26,7 @@ export interface RegisterResult {
 
 export interface HomeResult {
   status: ApiStatus;
+  tag: TagInterface | null;
   tags: TagInterface[];
   entries: EntryInterface[];
 }

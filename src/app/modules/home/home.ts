@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core
 import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatActionList, MatListItem, MatListItemIcon, MatNavList } from '@angular/material/list';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
@@ -33,6 +34,9 @@ import AddTag from '@shared/add-tag/add-tag';
     MatTabsModule,
     MatActionList,
     MatFabButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -63,13 +67,17 @@ export default class Home implements OnInit {
       if (response.status === ApiStatus.OK) {
         this.tags.set(this.classMapperService.getTags(response.tags));
         this.entries.set(this.classMapperService.getEntries(response.entries));
+        if (response.tag !== null) {
+          this.selectedTag.set(this.classMapperService.getTag(response.tag));
+        } else {
+          this.selectedTag.set(null);
+        }
       }
     });
   }
 
   selectTag(tag: Tag): void {
     this.selectedIdTag = tag.id;
-    this.selectedTag.set(tag);
     this.loadHome();
   }
 
@@ -79,7 +87,6 @@ export default class Home implements OnInit {
       return;
     }
     this.selectedIdTag = selectedTag.idParent;
-    this.selectedTag.set(null);
     this.loadHome();
   }
 

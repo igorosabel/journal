@@ -24,6 +24,13 @@
                            type="password"
                            [formField]="registerForm.conf">
                 </mat-form-field>
+                @if (registerForm.conf().touched() && registerForm.conf().invalid()) {
+                @for (err of registerForm.conf().errors(); track err.kind) {
+                @if (err.kind === 'password_mismatch') {
+                <span class="field-error center">{{ err.message }}</span>
+                }
+                }
+                }
                 @if (registerError()) {
                 <span class="field-error center">El nombre de usuario está en uso.</span>
                 }

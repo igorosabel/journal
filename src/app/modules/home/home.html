@@ -37,6 +37,14 @@
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <span class="spacer">Journal - {{ selectedTag()?.name }}</span>
+                <button mat-icon-button
+                        [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>Editar etiqueta</button>
+                    <button mat-menu-item>Borrar etiqueta</button>
+                </mat-menu>
                 }
             </mat-toolbar-row>
         </mat-toolbar>

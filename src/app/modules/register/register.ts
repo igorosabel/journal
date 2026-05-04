@@ -10,7 +10,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { disabled, form, FormField, required } from '@angular/forms/signals';
+import { disabled, form, FormField, required, validate } from '@angular/forms/signals';
 import { MatButton } from '@angular/material/button';
 import {
   MatCard,
@@ -66,6 +66,19 @@ export default class Register implements OnInit {
     disabled(schemaPath.name, (): boolean => this.loading());
     disabled(schemaPath.pass, (): boolean => this.loading());
     disabled(schemaPath.conf, (): boolean => this.loading());
+    validate(schemaPath.conf, (ctx) => {
+      const conf = ctx.value();
+      const pass = ctx.valueOf(schemaPath.pass);
+
+      if (conf !== '' && pass !== conf) {
+        return {
+          kind: 'password_mismatch',
+          message: 'Las contraseñas no coinciden.',
+        };
+      }
+
+      return null;
+    });
   });
   isValid: Signal<boolean> = computed(
     (): boolean =>
