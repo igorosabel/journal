@@ -7,3 +7,8 @@ export interface TagInterface {
   lastUsedAt: string | null;
   entries: EntryInterface[];
 }
+
+export interface TagResult {
+  status: string;
+  tag: TagInterface;
+}

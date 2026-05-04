@@ -1,1 +1,79 @@
-<p>home works!</p>
+<mat-sidenav-container class="container">
+    <mat-sidenav #sidenav
+                 [(opened)]="opened"
+                 mode="over">
+        <mat-toolbar>
+            <mat-toolbar-row>
+                <span>Journal</span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item
+               routerLink="/profile">
+                <mat-icon matListItemIcon>edit</mat-icon>
+                Editar perfil
+            </a>
+            <a mat-list-item
+               routerLink="/profile">
+                <mat-icon matListItemIcon>logout</mat-icon>
+                Cerrar sesión
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar>
+            <mat-toolbar-row>
+                @if (selectedTag() === null) {
+                <button mat-icon-button
+                        (click)="showMenu()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <span class="spacer">Journal</span>
+                }
+                @else {
+                <button mat-icon-button
+                        (click)="back()">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <span class="spacer">Journal - {{ selectedTag()?.name }}</span>
+                }
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <mat-tab-group [(selectedIndex)]="selectedTab">
+            <mat-tab label="Etiquetas">
+                <mat-action-list>
+                    @for (tag of tags(); track tag.id) {
+                    <button mat-list-item
+                            (click)="selectTag(tag)">{{ tag.name }}</button>
+                    }
+                    @empty {
+                    <button mat-list-item
+                            (click)="add()">No hay etiquetas, crea la primera aquí.</button>
+                    }
+                </mat-action-list>
+            </mat-tab>
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    Entradas
+                    <span class="entries-count">{{ entries().length }}</span>
+                </ng-template>
+                <mat-action-list>
+                    @for (entry of entries(); track entry.id) {
+                    <button mat-list-item
+                            (click)="selectEntry(entry)">{{ entry.title }}</button>
+                    }
+                    @empty {
+                    <button mat-list-item
+                            (click)="add()">No hay entradas, crea la primera aquí.</button>
+                    }
+                </mat-action-list>
+            </mat-tab>
+        </mat-tab-group>
+        <button matFab
+                class="add"
+                (click)="add()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </mat-sidenav-content>
+</mat-sidenav-container>

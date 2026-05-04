@@ -1,0 +1,22 @@
+.container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .entries-count {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-left: 8px;
+        border-radius: 12px;
+        background-color: var(--color-blue);
+        color: var(--color-white);
+    }
+
+    .add {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+    }
+}

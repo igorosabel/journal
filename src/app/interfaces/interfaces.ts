@@ -1,4 +1,6 @@
 import ApiStatus from '@enum/api-status.enum';
+import { EntryInterface } from '@interfaces/entry.interfaces';
+import { TagInterface } from '@interfaces/tag.interfaces';
 import { UserInterface } from '@interfaces/user.interfaces';
 
 export interface LoginData {
@@ -20,4 +22,10 @@ export interface RegisterData {
 export interface RegisterResult {
   status: ApiStatus;
   user: UserInterface;
+}
+
+export interface HomeResult {
+  status: ApiStatus;
+  tags: TagInterface[];
+  entries: EntryInterface[];
 }

@@ -71,7 +71,7 @@ export default class LoginComponent implements OnInit {
   loginError: WritableSignal<boolean> = signal<boolean>(false);
   loading: WritableSignal<boolean> = signal<boolean>(false);
 
-  username: Signal<ElementRef> = viewChild.required('username');
+  username: Signal<ElementRef> = viewChild.required<ElementRef>('username');
 
   ngOnInit(): void {
     if (this.us.logged) {

@@ -1,0 +1,25 @@
+<form (ngSubmit)="addTag()"
+      name="addTag">
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Nombre *</mat-label>
+            <input matInput
+                   [(ngModel)]="tagName"
+                   name="tagName"
+                   [ngModelOptions]="{standalone: true}"
+                   #name>
+        </mat-form-field>
+        @if (!validate()) {
+        <span class="field-error center">El nombre de la etiqueta es obligatorio.</span>
+        }
+    </div>
+    <div class="actions">
+        <button matButton="filled"
+                [disabled]="loading()">
+            @if (!loading()) {
+            Continuar
+            }
+            <app-loading-icon [show]="loading()" />
+        </button>
+    </div>
+</form>

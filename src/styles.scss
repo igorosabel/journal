@@ -2,6 +2,8 @@
 
 :root {
   --color-error: #dc3545;
+  --color-blue: #005cbb;
+  --color-white: #fff;
 }
 
 html {
@@ -11,6 +13,9 @@ html {
       ),
       typography: Roboto,
       density: 0,
+    ));
+  @include mat.toolbar-overrides((container-background-color: var(--color-blue),
+      container-text-color: var(--color-white),
     ));
 }
 
@@ -35,4 +40,17 @@ body {
 
 .center {
   text-align: center;
+}
+
+.mat-toolbar {
+
+  .mat-mdc-icon-button,
+  .mat-icon,
+  .material-icons {
+    color: var(--color-white) !important;
+  }
+
+  svg {
+    fill: var(--color-white);
+  }
 }
