@@ -88,7 +88,6 @@ export default class Home implements OnInit {
   }
 
   add(): void {
-    console.log(this.selectedTab);
     if (this.selectedTab === 0) {
       this.addTag();
     }
