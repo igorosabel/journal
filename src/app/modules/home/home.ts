@@ -6,7 +6,8 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import NavigationService from '@app/services/navigation.service';
 import ApiStatus from '@enum/api-status.enum';
 import { HomeResult, StatusResult } from '@interfaces/interfaces';
 import { EditTagData, TagInterface, TagResult } from '@interfaces/tag.interfaces';
@@ -47,6 +48,8 @@ export default class Home implements OnInit {
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
   private readonly overlayService: OverlayService = inject(OverlayService);
   private readonly dialog: DialogService = inject(DialogService);
+  private readonly navigationService: NavigationService = inject(NavigationService);
+  private readonly router: Router = inject(Router);
 
   opened: WritableSignal<boolean> = signal<boolean>(false);
   selectedIdTag: number | null = null;
@@ -57,6 +60,11 @@ export default class Home implements OnInit {
   entries: WritableSignal<Entry[]> = signal<Entry[]>([]);
 
   ngOnInit(): void {
+    const idTagFromNavigation: number | null = this.navigationService.getFromIdTag();
+    if (idTagFromNavigation !== null) {
+      this.selectedIdTag = idTagFromNavigation;
+      this.navigationService.setFromIdTag(null);
+    }
     this.loadHome();
   }
 
@@ -93,12 +101,17 @@ export default class Home implements OnInit {
   }
 
   selectEntry(entry: Entry): void {
-    console.log(entry);
+    this.navigationService.setFromIdTag(this.selectedIdTag);
+    this.router.navigate(['/entry', entry.id]);
   }
 
   add(): void {
     if (this.selectedTab === 0) {
       this.addTag();
+    }
+    if (this.selectedTab === 1) {
+      this.navigationService.setFromIdTag(this.selectedIdTag);
+      this.router.navigate(['/edit-entry/new']);
     }
   }
 

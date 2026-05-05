@@ -1,0 +1,38 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <button mat-icon-button
+                (click)="back()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="spacer">{{ title() }}</span>
+        <button mat-icon-button
+                (click)="save()">
+            <mat-icon>check</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-tab-group [(selectedIndex)]="selectedTab">
+    <mat-tab label="Título">
+        <div class="content">
+            <mat-form-field class="full-width">
+                <mat-label>Título *</mat-label>
+                <input matInput
+                       [(ngModel)]="entry.title"
+                       name="title"
+                       #name>
+            </mat-form-field>
+        </div>
+    </mat-tab>
+    <mat-tab label="Contenido">
+        <div class="content">
+            <mat-form-field class="full-width">
+                <mat-label>Contenido *</mat-label>
+                <textarea matInput
+                          [(ngModel)]="entry.body"
+                          name="body"
+                          #body></textarea>
+            </mat-form-field>
+        </div>
+    </mat-tab>
+    <mat-tab label="Etiquetas">Etiquetas</mat-tab>
+</mat-tab-group>

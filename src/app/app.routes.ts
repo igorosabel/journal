@@ -13,6 +13,16 @@ const routes: Routes = [
     loadComponent: () => import('@modules/home/home'),
     canActivate: [isLoggedGuardFn],
   },
+  {
+    path: 'entry/:id',
+    loadComponent: () => import('@modules/entry/entry'),
+    canActivate: [isLoggedGuardFn],
+  },
+  {
+    path: 'edit-entry/:id',
+    loadComponent: () => import('@modules/edit-entry/edit-entry'),
+    canActivate: [isLoggedGuardFn],
+  },
   { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
