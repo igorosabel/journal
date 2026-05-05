@@ -1,4 +1,5 @@
 import { EntryInterface } from '@interfaces/entry.interfaces';
+import { Modal } from '@osumi/angular-tools';
 
 export interface TagInterface {
   id: number | null;
@@ -10,5 +11,9 @@ export interface TagInterface {
 
 export interface TagResult {
   status: string;
+  tag: TagInterface;
+}
+
+export interface EditTagData extends Modal {
   tag: TagInterface;
 }

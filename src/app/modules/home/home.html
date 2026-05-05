@@ -42,8 +42,10 @@
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>Editar etiqueta</button>
-                    <button mat-menu-item>Borrar etiqueta</button>
+                    <button mat-menu-item
+                            (click)="editTag()">Editar etiqueta</button>
+                    <button mat-menu-item
+                            (click)="deleteTag()">Borrar etiqueta</button>
                 </mat-menu>
                 }
             </mat-toolbar-row>

@@ -30,3 +30,7 @@ export interface HomeResult {
   tags: TagInterface[];
   entries: EntryInterface[];
 }
+
+export interface StatusResult {
+  status: ApiStatus;
+}

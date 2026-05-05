@@ -7,15 +7,16 @@ import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/mat
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import { TagResult } from '@app/interfaces/tag.interfaces';
-import ApiStatus from '@app/model/enum/api-status.enum';
-import { HomeResult } from '@interfaces/interfaces';
+import ApiStatus from '@enum/api-status.enum';
+import { HomeResult, StatusResult } from '@interfaces/interfaces';
+import { EditTagData, TagInterface, TagResult } from '@interfaces/tag.interfaces';
 import Entry from '@model/entry.model';
 import Tag from '@model/tag.model';
-import { Modal, OverlayService } from '@osumi/angular-tools';
+import { DialogService, Modal, OverlayService } from '@osumi/angular-tools';
 import ApiService from '@services/api.service';
 import ClassMapperService from '@services/class-mapper.service';
 import AddTag from '@shared/add-tag/add-tag';
+import EditTag from '@shared/edit-tag/edit-tag';
 
 @Component({
   selector: 'app-home',
@@ -45,6 +46,7 @@ export default class Home implements OnInit {
   private readonly apiService: ApiService = inject(ApiService);
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
   private readonly overlayService: OverlayService = inject(OverlayService);
+  private readonly dialog: DialogService = inject(DialogService);
 
   opened: WritableSignal<boolean> = signal<boolean>(false);
   selectedIdTag: number | null = null;
@@ -101,14 +103,13 @@ export default class Home implements OnInit {
   }
 
   addTag(): void {
-    const modalDescuentoData: Modal = {
+    const modalAddData: Modal = {
       modalTitle: 'Añadir etiqueta',
       modalColor: 'blue',
     };
-    const dialog = this.overlayService.open(AddTag, modalDescuentoData);
+    const dialog = this.overlayService.open(AddTag, modalAddData);
     dialog.afterClosed$.subscribe((data): void => {
       if (data.data !== null) {
-        console.log(data.data);
         this.apiService
           .addTag(this.selectedIdTag, data.data.name)
           .subscribe((response: TagResult): void => {
@@ -118,5 +119,50 @@ export default class Home implements OnInit {
           });
       }
     });
+  }
+
+  editTag(): void {
+    const modalEditData: EditTagData = {
+      modalTitle: 'Editar etiqueta',
+      modalColor: 'blue',
+      tag: this.selectedTag()?.toInterface() as TagInterface,
+    };
+    const dialog = this.overlayService.open(EditTag, modalEditData);
+    dialog.afterClosed$.subscribe((data): void => {
+      if (data.data !== null) {
+        this.apiService.editTag(data.data.tag).subscribe((response: TagResult): void => {
+          console.log({ response });
+          if (response.status === ApiStatus.OK) {
+            const newTag: Tag = this.classMapperService.getTag(response.tag);
+            console.log({ newTag });
+            this.selectedTag.set(newTag);
+          }
+        });
+      }
+    });
+  }
+
+  deleteTag(): void {
+    this.dialog
+      .confirm({
+        title: 'Confirmar',
+        content: '¿Estas seguro de querer borrar la etiqueta "' + this.selectedTag()?.name + '"?',
+      })
+      .subscribe((result: boolean): void => {
+        if (result === true) {
+          this.apiService
+            .deleteTag(this.selectedTag()?.id as number)
+            .subscribe((result: StatusResult): void => {
+              if (result.status === ApiStatus.OK) {
+                this.back();
+              } else {
+                this.dialog.alert({
+                  title: 'Error',
+                  content: 'Ocurrió un error al borrar la etiqueta.',
+                });
+              }
+            });
+        }
+      });
   }
 }
