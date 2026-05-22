@@ -17,3 +17,11 @@ export interface TagResult {
 export interface EditTagData extends Modal {
   tag: TagInterface;
 }
+
+export interface EditTagResult {
+  tag: TagInterface;
+}
+
+export interface AddTagResult {
+  name: string;
+}

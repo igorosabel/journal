@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { TagInterface } from '@interfaces/tag.interfaces';
+import { EditTagData, EditTagResult } from '@interfaces/tag.interfaces';
 import Tag from '@model/tag.model';
 import { CustomOverlayRef } from '@osumi/angular-tools';
 import LoadingIcon from '@shared/loading-icon/loading-icon';
@@ -24,7 +24,7 @@ import LoadingIcon from '@shared/loading-icon/loading-icon';
   styleUrl: './edit-tag.scss',
 })
 export default class EditTag implements OnInit {
-  private readonly customOverlayRef: CustomOverlayRef<null, { tag: TagInterface }> =
+  private readonly customOverlayRef: CustomOverlayRef<EditTagResult, EditTagData> =
     inject(CustomOverlayRef);
 
   tag: Tag = new Tag().fromInterface(this.customOverlayRef.data.tag);

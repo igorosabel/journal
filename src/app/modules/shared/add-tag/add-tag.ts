@@ -12,7 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { CustomOverlayRef } from '@osumi/angular-tools';
+import { AddTagResult } from '@interfaces/tag.interfaces';
+import { CustomOverlayRef, Modal } from '@osumi/angular-tools';
 import LoadingIcon from '@shared/loading-icon/loading-icon';
 
 @Component({
@@ -22,7 +23,7 @@ import LoadingIcon from '@shared/loading-icon/loading-icon';
   styleUrl: './add-tag.scss',
 })
 export default class AddTag implements OnInit {
-  private readonly customOverlayRef: CustomOverlayRef<null, { name: string }> =
+  private readonly customOverlayRef: CustomOverlayRef<AddTagResult, Modal> =
     inject(CustomOverlayRef);
 
   tagName: string = '';

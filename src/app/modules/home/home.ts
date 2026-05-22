@@ -10,7 +10,13 @@ import { Router, RouterLink } from '@angular/router';
 import NavigationService from '@app/services/navigation.service';
 import ApiStatus from '@enum/api-status.enum';
 import { HomeResult, StatusResult } from '@interfaces/interfaces';
-import { EditTagData, TagInterface, TagResult } from '@interfaces/tag.interfaces';
+import {
+  AddTagResult,
+  EditTagData,
+  EditTagResult,
+  TagInterface,
+  TagResult,
+} from '@interfaces/tag.interfaces';
 import Entry from '@model/entry.model';
 import Tag from '@model/tag.model';
 import { DialogService, Modal, OverlayService } from '@osumi/angular-tools';
@@ -120,7 +126,7 @@ export default class Home implements OnInit {
       modalTitle: 'Añadir etiqueta',
       modalColor: 'blue',
     };
-    const dialog = this.overlayService.open(AddTag, modalAddData);
+    const dialog = this.overlayService.open<AddTagResult>(AddTag, modalAddData);
     dialog.afterClosed$.subscribe((data): void => {
       if (data.data !== null) {
         this.apiService
@@ -140,7 +146,7 @@ export default class Home implements OnInit {
       modalColor: 'blue',
       tag: this.selectedTag()?.toInterface() as TagInterface,
     };
-    const dialog = this.overlayService.open(EditTag, modalEditData);
+    const dialog = this.overlayService.open<EditTagResult>(EditTag, modalEditData);
     dialog.afterClosed$.subscribe((data): void => {
       if (data.data !== null) {
         this.apiService.editTag(data.data.tag).subscribe((response: TagResult): void => {
