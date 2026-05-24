@@ -16,6 +16,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import Entry from '@model/entry.model';
+import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
   selector: 'app-edit-entry',
@@ -30,6 +31,7 @@ import Entry from '@model/entry.model';
     MatLabel,
     MatInput,
     FormsModule,
+    QuillEditorComponent,
   ],
   templateUrl: './edit-entry.html',
   styleUrl: './edit-entry.scss',

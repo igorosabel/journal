@@ -25,13 +25,12 @@
     </mat-tab>
     <mat-tab label="Contenido">
         <div class="content">
-            <mat-form-field class="full-width">
-                <mat-label>Contenido *</mat-label>
-                <textarea matInput
+            <quill-editor class="full-width journal-editor"
                           [(ngModel)]="entry.body"
                           name="body"
-                          #body></textarea>
-            </mat-form-field>
+                          theme="snow"
+                          format="html"
+                          placeholder="Contenido *"></quill-editor>
         </div>
     </mat-tab>
     <mat-tab label="Etiquetas">Etiquetas</mat-tab>

@@ -22,6 +22,7 @@ import {
 import routes from '@app/app.routes';
 import TokenInterceptor from '@interceptors/token.interceptor';
 import provideCore from '@modules/core';
+import { provideQuillConfig } from 'ngx-quill/config';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline',
@@ -49,6 +50,18 @@ const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideHttpClient(withInterceptors([TokenInterceptor])),
     provideCore(),
+    provideQuillConfig({
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ indent: '-1' }, { indent: '+1' }],
+          ['blockquote', 'link', 'image'],
+          ['clean'],
+        ],
+      },
+    }),
   ],
 };
 
