@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HomeResult, StatusResult } from '@interfaces/interfaces';
-import { TagInterface, TagResult } from '@interfaces/tag.interfaces';
+import { TagInterface, TagResult, TagsResult } from '@interfaces/tag.interfaces';
 import ApiBaseService from '@services/api-base.service';
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,10 @@ import { Observable } from 'rxjs';
 export default class ApiService extends ApiBaseService {
   getHome(idParent: number | null): Observable<HomeResult> {
     return this.http.post<HomeResult>(this.apiUrl + 'get-home', { idParent });
+  }
+
+  getTags(idParent: number | null): Observable<TagsResult> {
+    return this.http.post<TagsResult>(this.apiUrl + 'get-tags', { idParent });
   }
 
   addTag(idParent: number | null, name: string): Observable<TagResult> {

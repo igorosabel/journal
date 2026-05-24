@@ -16,6 +16,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import Entry from '@model/entry.model';
+import TagTreeSelector from '@shared/tag-tree-selector/tag-tree-selector';
 import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
@@ -32,6 +33,7 @@ import { QuillEditorComponent } from 'ngx-quill';
     MatInput,
     FormsModule,
     QuillEditorComponent,
+    TagTreeSelector,
   ],
   templateUrl: './edit-entry.html',
   styleUrl: './edit-entry.scss',

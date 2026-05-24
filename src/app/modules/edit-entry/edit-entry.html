@@ -33,5 +33,9 @@
                           placeholder="Contenido *"></quill-editor>
         </div>
     </mat-tab>
-    <mat-tab label="Etiquetas">Etiquetas</mat-tab>
+    <mat-tab label="Etiquetas">
+        <div class="content">
+            <app-tag-tree-selector [(selectedTags)]="entry.tags"></app-tag-tree-selector>
+        </div>
+    </mat-tab>
 </mat-tab-group>

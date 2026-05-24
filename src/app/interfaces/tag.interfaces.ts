@@ -14,6 +14,12 @@ export interface TagResult {
   tag: TagInterface;
 }
 
+export interface TagsResult {
+  status: string;
+  tag: TagInterface | null;
+  tags: TagInterface[];
+}
+
 export interface EditTagData extends Modal {
   tag: TagInterface;
 }

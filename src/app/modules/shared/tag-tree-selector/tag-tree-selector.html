@@ -1,0 +1,94 @@
+<div class="tag-selector">
+    <mat-chip-set class="selected-tags"
+                  aria-label="Etiquetas seleccionadas">
+        @for (tag of selectedTags(); track tag.id) {
+        <mat-chip-row (removed)="removeTag(tag)">
+            {{ tag.name }}
+            <button matChipRemove
+                    [attr.aria-label]="'Quitar ' + tag.name">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip-row>
+        }
+        @empty {
+        <span class="empty-selection">Sin etiquetas seleccionadas</span>
+        }
+    </mat-chip-set>
+
+    <ul class="tag-tree"
+        ngTree
+        multi
+        selectionMode="explicit"
+        [values]="selectedTagKeys()"
+        (valuesChange)="onTreeValuesChange($event)"
+        #tree="ngTree">
+        <ng-template [ngTemplateOutlet]="treeNodes"
+                     [ngTemplateOutletContext]="{ nodes: nodes(), parent: tree }"></ng-template>
+    </ul>
+</div>
+
+<ng-template #treeNodes
+             let-nodes="nodes"
+             let-parent="parent">
+    @for (node of nodes; track trackNode($index, node)) {
+    <li class="tag-tree-node"
+        ngTreeItem
+        [parent]="parent"
+        [value]="node.key"
+        [label]="node.name"
+        [selectable]="node.selectable"
+        [expanded]="node.expanded"
+        (expandedChange)="onExpandedChange(node, $event)"
+        #treeItem="ngTreeItem">
+        <div class="tag-tree-row">
+            @if (node.hasChildren || node.loading) {
+            <button mat-icon-button
+                    class="toggle"
+                    type="button"
+                    [disabled]="node.loading"
+                    (click)="onExpandedChange(node, !node.expanded)"
+                    (pointerdown)="$event.stopPropagation()"
+                    [attr.aria-label]="node.expanded ? 'Cerrar ' + node.name : 'Abrir ' + node.name">
+                @if (node.loading) {
+                <mat-spinner diameter="18"></mat-spinner>
+                }
+                @else {
+                <mat-icon>{{ getExpandIcon(node) }}</mat-icon>
+                }
+            </button>
+            }
+            @else {
+            <span class="toggle-spacer"></span>
+            }
+
+            @if (node.selectable) {
+            <mat-checkbox [checked]="isSelected(node)"
+                          (change)="toggleTag(node, $event.checked)"
+                          (pointerdown)="$event.stopPropagation()">
+                {{ node.name }}
+            </mat-checkbox>
+            }
+            @else {
+            <span class="root-label">{{ node.name }}</span>
+            }
+        </div>
+
+        @if (node.hasChildren || node.children.length > 0 || node.loading) {
+        <ul class="tag-tree-children"
+            role="group">
+            <ng-template ngTreeItemGroup
+                         [ownedBy]="treeItem"
+                         #group="ngTreeItemGroup">
+                @if (node.loading) {
+                <li class="loading-node">Cargando etiquetas...</li>
+                }
+                @else {
+                <ng-template [ngTemplateOutlet]="treeNodes"
+                             [ngTemplateOutletContext]="{ nodes: node.children, parent: group }"></ng-template>
+                }
+            </ng-template>
+        </ul>
+        }
+    </li>
+    }
+</ng-template>
