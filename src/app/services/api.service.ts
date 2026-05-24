@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { EntryInterface, EntryResult } from '@interfaces/entry.interfaces';
 import { HomeResult, StatusResult } from '@interfaces/interfaces';
 import { TagInterface, TagResult, TagsResult } from '@interfaces/tag.interfaces';
 import ApiBaseService from '@services/api-base.service';
@@ -14,6 +15,10 @@ export default class ApiService extends ApiBaseService {
 
   getTags(idParent: number | null): Observable<TagsResult> {
     return this.http.post<TagsResult>(this.apiUrl + 'get-tags', { idParent });
+  }
+
+  saveEntry(entry: EntryInterface): Observable<EntryResult> {
+    return this.http.post<EntryResult>(this.apiUrl + 'save-entry', entry);
   }
 
   addTag(idParent: number | null, name: string): Observable<TagResult> {

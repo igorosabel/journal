@@ -8,3 +8,8 @@ export interface EntryInterface {
   updatedAt: string | null;
   tags: TagInterface[];
 }
+
+export interface EntryResult {
+  status: string;
+  entry: EntryInterface;
+}
