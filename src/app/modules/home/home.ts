@@ -1,13 +1,19 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatActionList, MatListItem, MatListItemIcon, MatNavList } from '@angular/material/list';
+import {
+  MatActionList,
+  MatListItem,
+  MatListItemIcon,
+  MatListItemLine,
+  MatListItemTitle,
+  MatNavList,
+} from '@angular/material/list';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { Router, RouterLink } from '@angular/router';
-import NavigationService from '@app/services/navigation.service';
 import ApiStatus from '@enum/api-status.enum';
 import { HomeResult, StatusResult } from '@interfaces/interfaces';
 import {
@@ -20,8 +26,11 @@ import {
 import Entry from '@model/entry.model';
 import Tag from '@model/tag.model';
 import { DialogService, Modal, OverlayService } from '@osumi/angular-tools';
+import ApiTagService from '@services/api-tag.service';
 import ApiService from '@services/api.service';
 import ClassMapperService from '@services/class-mapper.service';
+import NavigationService from '@services/navigation.service';
+import UserService from '@services/user.service';
 import AddTag from '@shared/add-tag/add-tag';
 import EditTag from '@shared/edit-tag/edit-tag';
 
@@ -34,6 +43,8 @@ import EditTag from '@shared/edit-tag/edit-tag';
     MatNavList,
     MatListItem,
     MatListItemIcon,
+    MatListItemTitle,
+    MatListItemLine,
     MatIcon,
     MatToolbar,
     MatToolbarRow,
@@ -51,8 +62,10 @@ import EditTag from '@shared/edit-tag/edit-tag';
 })
 export default class Home implements OnInit {
   private readonly apiService: ApiService = inject(ApiService);
+  private readonly apiTagService: ApiTagService = inject(ApiTagService);
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
   private readonly overlayService: OverlayService = inject(OverlayService);
+  private readonly userService: UserService = inject(UserService);
   private readonly dialog: DialogService = inject(DialogService);
   private readonly navigationService: NavigationService = inject(NavigationService);
   private readonly router: Router = inject(Router);
@@ -76,6 +89,11 @@ export default class Home implements OnInit {
 
   showMenu(): void {
     this.opened.set(true);
+  }
+
+  logout(): void {
+    this.userService.logout();
+    this.router.navigate(['/']);
   }
 
   loadHome(): void {
@@ -117,7 +135,7 @@ export default class Home implements OnInit {
     }
     if (this.selectedTab === 1) {
       this.navigationService.setFromIdTag(this.selectedIdTag);
-      this.router.navigate(['/edit-entry/new']);
+      this.router.navigate(['/new-entry']);
     }
   }
 
@@ -129,7 +147,7 @@ export default class Home implements OnInit {
     const dialog = this.overlayService.open<AddTagResult>(AddTag, modalAddData);
     dialog.afterClosed$.subscribe((data): void => {
       if (data.data !== null) {
-        this.apiService
+        this.apiTagService
           .addTag(this.selectedIdTag, data.data.name)
           .subscribe((response: TagResult): void => {
             if (response.status === ApiStatus.OK) {
@@ -149,7 +167,7 @@ export default class Home implements OnInit {
     const dialog = this.overlayService.open<EditTagResult>(EditTag, modalEditData);
     dialog.afterClosed$.subscribe((data): void => {
       if (data.data !== null) {
-        this.apiService.editTag(data.data.tag).subscribe((response: TagResult): void => {
+        this.apiTagService.editTag(data.data.tag).subscribe((response: TagResult): void => {
           console.log({ response });
           if (response.status === ApiStatus.OK) {
             const newTag: Tag = this.classMapperService.getTag(response.tag);
@@ -169,7 +187,7 @@ export default class Home implements OnInit {
       })
       .subscribe((result: boolean): void => {
         if (result === true) {
-          this.apiService
+          this.apiTagService
             .deleteTag(this.selectedTag()?.id as number)
             .subscribe((result: StatusResult): void => {
               if (result.status === ApiStatus.OK) {

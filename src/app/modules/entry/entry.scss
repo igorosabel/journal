@@ -1,0 +1,11 @@
+.content {
+    padding: 16px;
+}
+
+.journal-editor {
+    display: block;
+}
+
+::ng-deep .journal-editor .ql-editor {
+    min-height: 320px;
+}

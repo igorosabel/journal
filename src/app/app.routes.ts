@@ -19,8 +19,8 @@ const routes: Routes = [
     canActivate: [isLoggedGuardFn],
   },
   {
-    path: 'edit-entry/:id',
-    loadComponent: () => import('@modules/edit-entry/edit-entry'),
+    path: 'new-entry',
+    loadComponent: () => import('@modules/entry/entry'),
     canActivate: [isLoggedGuardFn],
   },
   { path: '**', redirectTo: '/', pathMatch: 'full' },

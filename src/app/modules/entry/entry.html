@@ -1,1 +1,53 @@
-<p>entry works!</p>
+<mat-toolbar>
+    <mat-toolbar-row>
+        <button mat-icon-button
+                (click)="back()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="spacer">{{ title() }}</span>
+        <button mat-icon-button
+                [disabled]="loading()"
+                (click)="save()">
+            <mat-icon>check</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-tab-group [(selectedIndex)]="selectedTab">
+    <mat-tab label="Título">
+        <div class="content">
+            <mat-form-field class="full-width">
+                <mat-label>Título *</mat-label>
+                <input matInput
+                       [(ngModel)]="entry.title"
+                       (ngModelChange)="titleError.set(false)"
+                       name="title"
+                       #name>
+            </mat-form-field>
+            @if (titleError()) {
+            <span class="field-error">El título es obligatorio.</span>
+            }
+        </div>
+    </mat-tab>
+    <mat-tab label="Contenido">
+        <div class="content">
+            <quill-editor class="full-width journal-editor"
+                          [(ngModel)]="entry.body"
+                          (ngModelChange)="bodyError.set(false)"
+                          name="body"
+                          theme="snow"
+                          format="html"
+                          placeholder="Contenido *"></quill-editor>
+            @if (bodyError()) {
+            <span class="field-error">El contenido es obligatorio.</span>
+            }
+            @if (saveError()) {
+            <span class="field-error">Ocurrió un error al guardar la entrada.</span>
+            }
+        </div>
+    </mat-tab>
+    <mat-tab label="Etiquetas">
+        <div class="content">
+            <app-tag-tree-selector [(selectedTags)]="entry.tags"></app-tag-tree-selector>
+        </div>
+    </mat-tab>
+</mat-tab-group>

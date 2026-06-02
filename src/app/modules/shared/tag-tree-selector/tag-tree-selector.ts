@@ -18,7 +18,7 @@ import ApiStatus from '@enum/api-status.enum';
 import TagTreeNode from '@interfaces/tag-tree-node.interface';
 import { TagsResult } from '@interfaces/tag.interfaces';
 import Tag from '@model/tag.model';
-import ApiService from '@services/api.service';
+import ApiTagService from '@services/api-tag.service';
 import ClassMapperService from '@services/class-mapper.service';
 
 @Component({
@@ -40,7 +40,7 @@ import ClassMapperService from '@services/class-mapper.service';
   styleUrl: './tag-tree-selector.scss',
 })
 export default class TagTreeSelector {
-  private readonly apiService: ApiService = inject(ApiService);
+  private readonly apiTagService: ApiTagService = inject(ApiTagService);
   private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
 
   selectedTags: ModelSignal<Tag[]> = model<Tag[]>([]);
@@ -132,7 +132,7 @@ export default class TagTreeSelector {
     node.loading = true;
     this.refreshNodes();
 
-    this.apiService.getTags(node.tag?.id ?? null).subscribe((response: TagsResult): void => {
+    this.apiTagService.getTags(node.tag?.id ?? null).subscribe((response: TagsResult): void => {
       node.loading = false;
 
       if (response.status === ApiStatus.OK) {

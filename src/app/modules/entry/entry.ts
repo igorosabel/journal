@@ -1,9 +1,171 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  InputSignal,
+  OnInit,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconButton } from '@angular/material/button';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { Router } from '@angular/router';
+import ApiStatus from '@enum/api-status.enum';
+import { EntryResult } from '@interfaces/entry.interfaces';
+import Entry from '@model/entry.model';
+import { DialogService } from '@osumi/angular-tools';
+import ApiEntryService from '@services/api-entry.service';
+import ClassMapperService from '@services/class-mapper.service';
+import TagTreeSelector from '@shared/tag-tree-selector/tag-tree-selector';
+import { QuillEditorComponent } from 'ngx-quill';
 
 @Component({
-  selector: 'app-entry',
-  imports: [],
+  selector: 'app-edit-entry',
+  imports: [
+    MatToolbar,
+    MatToolbarRow,
+    MatIconButton,
+    MatIcon,
+    MatTabGroup,
+    MatTab,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FormsModule,
+    QuillEditorComponent,
+    TagTreeSelector,
+  ],
   templateUrl: './entry.html',
   styleUrl: './entry.scss',
 })
-export default class Entry {}
+export default class EditEntry implements OnInit {
+  private readonly apiEntryService: ApiEntryService = inject(ApiEntryService);
+  private readonly classMapperService: ClassMapperService = inject(ClassMapperService);
+  private readonly router: Router = inject(Router);
+  private readonly dialog: DialogService = inject(DialogService);
+
+  id: InputSignal<number | undefined> = input.required<number | undefined>();
+  title: WritableSignal<string> = signal<string>('Nueva entrada');
+  titleError: WritableSignal<boolean> = signal<boolean>(false);
+  bodyError: WritableSignal<boolean> = signal<boolean>(false);
+  saveError: WritableSignal<boolean> = signal<boolean>(false);
+  loading: WritableSignal<boolean> = signal<boolean>(false);
+  entry: Entry = new Entry();
+  selectedTab: number = 0;
+
+  ngOnInit(): void {
+    if (this.id() === undefined) {
+      this.title.set('Nueva entrada');
+    } else {
+      this.loadEntry();
+    }
+  }
+
+  loadEntry(): void {
+    if (this.id() === undefined) {
+      return;
+    }
+
+    this.apiEntryService.getEntry(this.id()!).subscribe({
+      next: (result: EntryResult): void => {
+        if (result.status === ApiStatus.OK) {
+          this.entry = this.classMapperService.getEntry(result.entry);
+          this.title.set(this.entry.title ?? 'Editar entrada');
+        } else {
+          this.loadEntryError();
+        }
+      },
+      error: (): void => {
+        this.loadEntryError();
+      },
+    });
+  }
+
+  loadEntryError(): void {
+    this.dialog
+      .alert({
+        title: 'Error',
+        content: 'Ocurrió un error al cargar la entrada.',
+      })
+      .subscribe((): void => {
+        this.router.navigate(['/home']);
+      });
+  }
+
+  back(): void {
+    this.router.navigate(['/home']);
+  }
+
+  save(): void {
+    if (this.loading()) {
+      return;
+    }
+
+    if (this.validate() === false) {
+      return;
+    }
+
+    this.saveError.set(false);
+    this.loading.set(true);
+
+    this.apiEntryService.saveEntry(this.entry.toInterface()).subscribe({
+      next: (result: EntryResult): void => {
+        this.loading.set(false);
+
+        if (result.status === ApiStatus.OK) {
+          this.entry = this.classMapperService.getEntry(result.entry);
+          this.router.navigate(['/entry', this.entry.id]);
+        } else {
+          this.showSaveError();
+        }
+      },
+      error: (): void => {
+        this.loading.set(false);
+        this.showSaveError();
+      },
+    });
+  }
+
+  private validate(): boolean {
+    const titleValid: boolean = this.hasText(this.entry.title);
+    const bodyValid: boolean = this.hasRichText(this.entry.body);
+
+    this.titleError.set(!titleValid);
+    this.bodyError.set(!bodyValid);
+
+    if (titleValid === false) {
+      this.selectedTab = 0;
+      return false;
+    }
+
+    if (bodyValid === false) {
+      this.selectedTab = 1;
+      return false;
+    }
+
+    return true;
+  }
+
+  private showSaveError(): void {
+    this.selectedTab = 1;
+    this.saveError.set(true);
+  }
+
+  private hasText(value: string | null): boolean {
+    return (value ?? '').trim().length > 0;
+  }
+
+  private hasRichText(value: string | null): boolean {
+    const plainText: string = (value ?? '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .trim();
+
+    return plainText.length > 0;
+  }
+}

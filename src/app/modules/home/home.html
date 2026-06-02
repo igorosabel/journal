@@ -14,7 +14,7 @@
                 Editar perfil
             </a>
             <a mat-list-item
-               routerLink="/profile">
+               (click)="logout()">
                 <mat-icon matListItemIcon>logout</mat-icon>
                 Cerrar sesión
             </a>
@@ -71,7 +71,10 @@
                 <mat-action-list>
                     @for (entry of entries(); track entry.id) {
                     <button mat-list-item
-                            (click)="selectEntry(entry)">{{ entry.title }}</button>
+                            (click)="selectEntry(entry)">
+                        <span matListItemTitle>{{ entry.title }}</span>
+                        <span matListItemLine>{{ entry.fechaSinSegundos }}</span>
+                    </button>
                     }
                     @empty {
                     <button mat-list-item

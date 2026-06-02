@@ -34,4 +34,14 @@ export default class Entry {
       tags: this.tags.map((t: Tag): TagInterface => t.toInterface()),
     };
   }
+
+  get fechaSinSegundos(): string {
+    if (this.createdAt === null) {
+      return '';
+    }
+    const [fecha, hora] = this.createdAt.split(' ');
+    const [dia, mes, ano] = fecha.split('/');
+    const [horas, minutos] = hora.split(':');
+    return `${dia}/${mes}/${ano} ${horas}:${minutos}`;
+  }
 }
