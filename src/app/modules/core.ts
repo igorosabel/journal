@@ -11,12 +11,12 @@ import UserService from '@services/user.service';
 
 export default function provideCore(): Provider[] {
   return [
-    AuthService,
     ApiBaseService,
     ApiEntryService,
     ApiTagService,
-    ApiService,
     ApiUsersService,
+    ApiService,
+    AuthService,
     ClassMapperService,
     NavigationService,
     UserService,

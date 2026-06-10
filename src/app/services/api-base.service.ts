@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { environment } from '@env/environment';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ApiBaseService {
   http: HttpClient = inject(HttpClient);
 

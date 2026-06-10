@@ -1,12 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { StatusResult } from '@interfaces/interfaces';
 import { TagInterface, TagResult, TagsResult } from '@interfaces/tag.interfaces';
 import ApiBaseService from '@services/api-base.service';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ApiTagService extends ApiBaseService {
   getTags(idParent: number | null): Observable<TagsResult> {
     return this.http.post<TagsResult>(this.apiUrl + 'get-tags', { idParent });

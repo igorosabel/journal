@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { EntryInterface } from '@interfaces/entry.interfaces';
 import { TagInterface } from '@interfaces/tag.interfaces';
 import { UserInterface } from '@interfaces/user.interfaces';
@@ -6,9 +6,7 @@ import Entry from '@model/entry.model';
 import Tag from '@model/tag.model';
 import User from '@model/user.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class ClassMapperService {
   getUser(u: UserInterface): User {
     return new User().fromInterface(u);

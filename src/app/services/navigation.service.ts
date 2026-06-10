@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export default class NavigationService {
   private fromIdTag: number | null = null;
 

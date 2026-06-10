@@ -1,12 +1,7 @@
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import esLocale from '@angular/common/locales/es';
-import {
-  ApplicationConfig,
-  LOCALE_ID,
-  provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -47,7 +42,6 @@ const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
     ),
     provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection(),
     provideHttpClient(withInterceptors([TokenInterceptor])),
     provideCore(),
     provideQuillConfig({

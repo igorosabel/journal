@@ -19,8 +19,8 @@
         ngTree
         multi
         selectionMode="explicit"
-        [values]="selectedTagKeys()"
-        (valuesChange)="onTreeValuesChange($event)"
+        [value]="selectedTagKeys()"
+        (valueChange)="onTreeValuesChange($event)"
         #tree="ngTree">
         <ng-template [ngTemplateOutlet]="treeNodes"
                      [ngTemplateOutletContext]="{ nodes: nodes(), parent: tree }"></ng-template>
