@@ -168,10 +168,8 @@ export default class Home implements OnInit {
     dialog.afterClosed$.subscribe((data): void => {
       if (data.data !== null) {
         this.apiTagService.editTag(data.data.tag).subscribe((response: TagResult): void => {
-          console.log({ response });
           if (response.status === ApiStatus.OK) {
             const newTag: Tag = this.classMapperService.getTag(response.tag);
-            console.log({ newTag });
             this.selectedTag.set(newTag);
           }
         });
